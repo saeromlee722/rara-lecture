@@ -149,11 +149,11 @@
       <div class="question-label">현재 활동 형태<span class="required">*</span></div>
       <div class="question-sub">복수 선택 가능</div>
       <div class="options-grid cols2">
-        <label class="option-item" onclick="toggleCheck(this)"><input type="checkbox" name="q_activity" value="PT 트레이너"><div class="option-check"></div><span class="option-text">PT 트레이너</span></label>
-        <label class="option-item" onclick="toggleCheck(this)"><input type="checkbox" name="q_activity" value="필라테스 강사"><div class="option-check"></div><span class="option-text">필라테스 강사</span></label>
-        <label class="option-item" onclick="toggleCheck(this)"><input type="checkbox" name="q_activity" value="온라인 코칭"><div class="option-check"></div><span class="option-text">온라인 코칭</span></label>
-        <label class="option-item" onclick="toggleCheck(this)"><input type="checkbox" name="q_activity" value="그룹수업"><div class="option-check"></div><span class="option-text">그룹수업</span></label>
-        <label class="option-item" onclick="toggleCheck(this)"><input type="checkbox" name="q_activity" value="기타"><div class="option-check"></div><span class="option-text">기타</span></label>
+        <label class="option-item" onclick="toggleCheck(event, this)"><input type="checkbox" name="q_activity" value="PT 트레이너"><div class="option-check"></div><span class="option-text">PT 트레이너</span></label>
+        <label class="option-item" onclick="toggleCheck(event, this)"><input type="checkbox" name="q_activity" value="필라테스 강사"><div class="option-check"></div><span class="option-text">필라테스 강사</span></label>
+        <label class="option-item" onclick="toggleCheck(event, this)"><input type="checkbox" name="q_activity" value="온라인 코칭"><div class="option-check"></div><span class="option-text">온라인 코칭</span></label>
+        <label class="option-item" onclick="toggleCheck(event, this)"><input type="checkbox" name="q_activity" value="그룹수업"><div class="option-check"></div><span class="option-text">그룹수업</span></label>
+        <label class="option-item" onclick="toggleCheck(event, this)"><input type="checkbox" name="q_activity" value="기타"><div class="option-check"></div><span class="option-text">기타</span></label>
       </div>
     </div>
     <div class="question">
@@ -193,11 +193,11 @@
       <div class="question-label">식단 구성 기준은 무엇인가요?</div>
       <div class="question-sub">복수 선택 가능</div>
       <div class="options-grid cols2">
-        <label class="option-item" onclick="toggleCheck(this)"><input type="checkbox" name="q_basis" value="칼로리"><div class="option-check"></div><span class="option-text">칼로리 기준</span></label>
-        <label class="option-item" onclick="toggleCheck(this)"><input type="checkbox" name="q_basis" value="탄단지 비율"><div class="option-check"></div><span class="option-text">탄단지 비율</span></label>
-        <label class="option-item" onclick="toggleCheck(this)"><input type="checkbox" name="q_basis" value="음식 종류"><div class="option-check"></div><span class="option-text">음식 종류 (클린/가공)</span></label>
-        <label class="option-item" onclick="toggleCheck(this)"><input type="checkbox" name="q_basis" value="식사 타이밍"><div class="option-check"></div><span class="option-text">식사 타이밍</span></label>
-        <label class="option-item" onclick="toggleCheck(this)"><input type="checkbox" name="q_basis" value="감으로"><div class="option-check"></div><span class="option-text">감으로</span></label>
+        <label class="option-item" onclick="toggleCheck(event, this)"><input type="checkbox" name="q_basis" value="칼로리"><div class="option-check"></div><span class="option-text">칼로리 기준</span></label>
+        <label class="option-item" onclick="toggleCheck(event, this)"><input type="checkbox" name="q_basis" value="탄단지 비율"><div class="option-check"></div><span class="option-text">탄단지 비율</span></label>
+        <label class="option-item" onclick="toggleCheck(event, this)"><input type="checkbox" name="q_basis" value="음식 종류"><div class="option-check"></div><span class="option-text">음식 종류 (클린/가공)</span></label>
+        <label class="option-item" onclick="toggleCheck(event, this)"><input type="checkbox" name="q_basis" value="식사 타이밍"><div class="option-check"></div><span class="option-text">식사 타이밍</span></label>
+        <label class="option-item" onclick="toggleCheck(event, this)"><input type="checkbox" name="q_basis" value="감으로"><div class="option-check"></div><span class="option-text">감으로</span></label>
       </div>
     </div>
     <div class="question">
@@ -399,12 +399,12 @@
       <div class="question-label">자주 겪는 어려운 상황<span class="required">*</span></div>
       <div class="question-sub">복수 선택 가능</div>
       <div class="options-grid cols2">
-        <label class="option-item" onclick="toggleCheck(this)"><input type="checkbox" name="q_situation" value="폭식/야식"><div class="option-check"></div><span class="option-text">폭식 / 야식</span></label>
-        <label class="option-item" onclick="toggleCheck(this)"><input type="checkbox" name="q_situation" value="정체기"><div class="option-check"></div><span class="option-text">정체기</span></label>
-        <label class="option-item" onclick="toggleCheck(this)"><input type="checkbox" name="q_situation" value="외식"><div class="option-check"></div><span class="option-text">외식</span></label>
-        <label class="option-item" onclick="toggleCheck(this)"><input type="checkbox" name="q_situation" value="탄수화물 조절"><div class="option-check"></div><span class="option-text">탄수화물 조절</span></label>
-        <label class="option-item" onclick="toggleCheck(this)"><input type="checkbox" name="q_situation" value="식단 유지 실패"><div class="option-check"></div><span class="option-text">식단 유지 실패</span></label>
-        <label class="option-item" onclick="toggleCheck(this)"><input type="checkbox" name="q_situation" value="여성 컨디션 변화"><div class="option-check"></div><span class="option-text">여성 회원 컨디션 변화</span></label>
+        <label class="option-item" onclick="toggleCheck(event, this)"><input type="checkbox" name="q_situation" value="폭식/야식"><div class="option-check"></div><span class="option-text">폭식 / 야식</span></label>
+        <label class="option-item" onclick="toggleCheck(event, this)"><input type="checkbox" name="q_situation" value="정체기"><div class="option-check"></div><span class="option-text">정체기</span></label>
+        <label class="option-item" onclick="toggleCheck(event, this)"><input type="checkbox" name="q_situation" value="외식"><div class="option-check"></div><span class="option-text">외식</span></label>
+        <label class="option-item" onclick="toggleCheck(event, this)"><input type="checkbox" name="q_situation" value="탄수화물 조절"><div class="option-check"></div><span class="option-text">탄수화물 조절</span></label>
+        <label class="option-item" onclick="toggleCheck(event, this)"><input type="checkbox" name="q_situation" value="식단 유지 실패"><div class="option-check"></div><span class="option-text">식단 유지 실패</span></label>
+        <label class="option-item" onclick="toggleCheck(event, this)"><input type="checkbox" name="q_situation" value="여성 컨디션 변화"><div class="option-check"></div><span class="option-text">여성 회원 컨디션 변화</span></label>
       </div>
     </div>
     <div class="btn-row"><button class="btn-prev" onclick="prevStep()">← 이전</button><button class="btn-next" onclick="nextStep()">다음 →</button></div>
@@ -424,13 +424,13 @@
       <div class="question-label">관심 주제<span class="required">*</span></div>
       <div class="question-sub">복수 선택 가능</div>
       <div class="options-grid cols2">
-        <label class="option-item" onclick="toggleCheck(this)"><input type="checkbox" name="q_topics" value="탄단지 구성법"><div class="option-check"></div><span class="option-text">탄단지 구성법</span></label>
-        <label class="option-item" onclick="toggleCheck(this)"><input type="checkbox" name="q_topics" value="회원 식단 설계"><div class="option-check"></div><span class="option-text">회원 식단 설계</span></label>
-        <label class="option-item" onclick="toggleCheck(this)"><input type="checkbox" name="q_topics" value="혈당/인슐린"><div class="option-check"></div><span class="option-text">혈당 / 인슐린</span></label>
-        <label class="option-item" onclick="toggleCheck(this)"><input type="checkbox" name="q_topics" value="여성 호르몬"><div class="option-check"></div><span class="option-text">여성 호르몬</span></label>
-        <label class="option-item" onclick="toggleCheck(this)"><input type="checkbox" name="q_topics" value="정체기 해결"><div class="option-check"></div><span class="option-text">정체기 해결</span></label>
-        <label class="option-item" onclick="toggleCheck(this)"><input type="checkbox" name="q_topics" value="식욕 조절"><div class="option-check"></div><span class="option-text">식욕 조절</span></label>
-        <label class="option-item" onclick="toggleCheck(this)"><input type="checkbox" name="q_topics" value="상담 스킬"><div class="option-check"></div><span class="option-text">상담 스킬</span></label>
+        <label class="option-item" onclick="toggleCheck(event, this)"><input type="checkbox" name="q_topics" value="탄단지 구성법"><div class="option-check"></div><span class="option-text">탄단지 구성법</span></label>
+        <label class="option-item" onclick="toggleCheck(event, this)"><input type="checkbox" name="q_topics" value="회원 식단 설계"><div class="option-check"></div><span class="option-text">회원 식단 설계</span></label>
+        <label class="option-item" onclick="toggleCheck(event, this)"><input type="checkbox" name="q_topics" value="혈당/인슐린"><div class="option-check"></div><span class="option-text">혈당 / 인슐린</span></label>
+        <label class="option-item" onclick="toggleCheck(event, this)"><input type="checkbox" name="q_topics" value="여성 호르몬"><div class="option-check"></div><span class="option-text">여성 호르몬</span></label>
+        <label class="option-item" onclick="toggleCheck(event, this)"><input type="checkbox" name="q_topics" value="정체기 해결"><div class="option-check"></div><span class="option-text">정체기 해결</span></label>
+        <label class="option-item" onclick="toggleCheck(event, this)"><input type="checkbox" name="q_topics" value="식욕 조절"><div class="option-check"></div><span class="option-text">식욕 조절</span></label>
+        <label class="option-item" onclick="toggleCheck(event, this)"><input type="checkbox" name="q_topics" value="상담 스킬"><div class="option-check"></div><span class="option-text">상담 스킬</span></label>
       </div>
     </div>
     <div class="btn-row"><button class="btn-prev" onclick="prevStep()">← 이전</button><button class="btn-next" onclick="nextStep()">다음 →</button></div>
@@ -447,10 +447,10 @@
       <div class="question-label">원하는 강의 방식<span class="required">*</span></div>
       <div class="question-sub">복수 선택 가능</div>
       <div class="options-grid cols2">
-        <label class="option-item" onclick="toggleCheck(this)"><input type="checkbox" name="q_style" value="이론 중심"><div class="option-check"></div><span class="option-text">이론 중심</span></label>
-        <label class="option-item" onclick="toggleCheck(this)"><input type="checkbox" name="q_style" value="사례 중심"><div class="option-check"></div><span class="option-text">사례 중심</span></label>
-        <label class="option-item" onclick="toggleCheck(this)"><input type="checkbox" name="q_style" value="실습 중심"><div class="option-check"></div><span class="option-text">실습 중심</span></label>
-        <label class="option-item" onclick="toggleCheck(this)"><input type="checkbox" name="q_style" value="피드백 중심"><div class="option-check"></div><span class="option-text">피드백 중심</span></label>
+        <label class="option-item" onclick="toggleCheck(event, this)"><input type="checkbox" name="q_style" value="이론 중심"><div class="option-check"></div><span class="option-text">이론 중심</span></label>
+        <label class="option-item" onclick="toggleCheck(event, this)"><input type="checkbox" name="q_style" value="사례 중심"><div class="option-check"></div><span class="option-text">사례 중심</span></label>
+        <label class="option-item" onclick="toggleCheck(event, this)"><input type="checkbox" name="q_style" value="실습 중심"><div class="option-check"></div><span class="option-text">실습 중심</span></label>
+        <label class="option-item" onclick="toggleCheck(event, this)"><input type="checkbox" name="q_style" value="피드백 중심"><div class="option-check"></div><span class="option-text">피드백 중심</span></label>
       </div>
     </div>
     <div class="question">
@@ -504,7 +504,9 @@
     el.querySelector('input').checked = true;
   }
 
-  function toggleCheck(el) {
+  function toggleCheck(e, el) {
+    e.preventDefault();
+    e.stopPropagation();
     el.classList.toggle('selected');
     el.querySelector('input').checked = el.classList.contains('selected');
   }
