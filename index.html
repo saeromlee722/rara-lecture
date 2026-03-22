@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>라라 영양학 클래스 · 사전 설문</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600&family=Noto+Sans+KR:wght@300;400;500&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green-deep: #1a2e1a;
+    --green-mid: #2d4a2d;
+    --green-soft: #3a6b3a;
+    --green-muted: #4e7a4e;
+    --green-pale: #7aaa7a;
+    --cream: #f5f0e8;
+    --cream-warm: #ede6d6;
+    --cream-dark: #d4c9b0;
+    --text-dark: #1a2e1a;
+    --text-mid: #2d4a2d;
+    --text-light: #5a7a5a;
+    --gold: #b8974a;
+    --bg: #f5f0e8;
+    --card: #ede6d6;
+    --border: #c8bfa8;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Noto Sans KR', sans-serif; background: var(--bg); color: var(--text-dark); min-height: 100vh; }
+  .header { background: var(--green-deep); padding: 48px 24px 40px; text-align: center; position: relative; overflow: hidden; }
+  .header::before { content: ''; position: absolute; top: -60px; left: 50%; transform: translateX(-50%); width: 400px; height: 400px; background: radial-gradient(circle, rgba(74,124,74,0.25) 0%, transparent 70%); pointer-events: none; }
+  .header-label { font-family: 'Cormorant Garamond', serif; font-size: 12px; letter-spacing: 4px; color: #a8d8a8; text-transform: uppercase; margin-bottom: 12px; }
+  .header-title { font-family: 'Noto Serif KR', serif; font-size: clamp(22px, 5vw, 30px); font-weight: 300; color: var(--cream); line-height: 1.5; margin-bottom: 10px; }
+  .header-title span { color: var(--green-muted); font-style: italic; font-family: 'Cormorant Garamond', serif; font-size: 1.1em; }
+  .header-sub { font-size: 13px; color: #dff0df; font-weight: 300; letter-spacing: 0.5px; margin-top: 8px; }
+  .header-deco { width: 40px; height: 1px; background: var(--green-muted); margin: 16px auto; }
+  .progress-wrap { background: var(--green-mid); padding: 14px 24px; display: flex; align-items: center; gap: 12px; position: sticky; top: 0; z-index: 100; }
+  .progress-text { font-size: 11px; color: #dff0df; letter-spacing: 1px; white-space: nowrap; font-weight: 300; }
+  .progress-bar-bg { flex: 1; height: 2px; background: rgba(255,255,255,0.15); border-radius: 2px; overflow: hidden; }
+  .progress-bar-fill { height: 100%; background: var(--green-muted); border-radius: 2px; transition: width 0.5s ease; }
+  .progress-pct { font-size: 11px; color: #a8d8a8; font-weight: 500; white-space: nowrap; }
+  .container { max-width: 680px; margin: 0 auto; padding: 0 20px 80px; background: var(--bg); }
+  .step { display: none; animation: fadeUp 0.4s ease; }
+  .step.active { display: block; }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+  .step-header { padding: 40px 0 28px; border-bottom: 1px solid var(--border); margin-bottom: 32px; }
+  .step-num { font-family: 'Cormorant Garamond', serif; font-size: 11px; letter-spacing: 3px; color: var(--text-light); text-transform: uppercase; margin-bottom: 8px; }
+  .step-title { font-family: 'Noto Serif KR', serif; font-size: 20px; font-weight: 400; color: var(--green-deep); line-height: 1.5; }
+  .step-desc { font-size: 13px; color: var(--text-light); margin-top: 6px; font-weight: 300; line-height: 1.7; }
+  .question { margin-bottom: 32px; }
+  .question-label { font-size: 14px; font-weight: 600; color: var(--green-deep); margin-bottom: 4px; line-height: 1.6; }
+  .question-sub { font-size: 12px; color: var(--text-light); margin-bottom: 12px; font-weight: 300; }
+  .required { color: #2d7a2d; margin-left: 2px; }
+  input[type="text"], textarea { width: 100%; background: #fff; border: 1px solid var(--border); border-radius: 4px; padding: 12px 14px; font-family: 'Noto Sans KR', sans-serif; font-size: 13px; color: var(--text-dark); outline: none; transition: border-color 0.2s; }
+  input[type="text"]:focus, textarea:focus { border-color: var(--green-soft); box-shadow: 0 0 0 3px rgba(74,124,74,0.08); }
+  textarea { resize: vertical; min-height: 80px; }
+  .options-grid { display: grid; gap: 8px; }
+  .options-grid.cols2 { grid-template-columns: 1fr 1fr; }
+  .options-grid.cols3 { grid-template-columns: repeat(3, 1fr); }
+  .option-item { display: flex; align-items: flex-start; gap: 10px; padding: 12px 14px; background: #fff; border: 1px solid var(--border); border-radius: 4px; cursor: pointer; transition: all 0.2s; }
+  .option-item:hover { border-color: var(--green-muted); background: var(--cream-warm); }
+  .option-item.selected { border-color: var(--green-soft); background: rgba(58,107,58,0.08); }
+  .option-item input { display: none; }
+  .option-dot { width: 16px; height: 16px; border: 1.5px solid var(--border); border-radius: 50%; flex-shrink: 0; margin-top: 1px; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+  .option-item.selected .option-dot { border-color: var(--green-soft); background: var(--green-soft); }
+  .option-dot::after { content: ''; width: 6px; height: 6px; background: #fff; border-radius: 50%; opacity: 0; transition: opacity 0.2s; }
+  .option-item.selected .option-dot::after { opacity: 1; }
+  .option-check { width: 16px; height: 16px; border: 1.5px solid var(--border); border-radius: 3px; flex-shrink: 0; margin-top: 1px; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+  .option-item.selected .option-check { border-color: var(--green-soft); background: var(--green-soft); }
+  .option-check::after { content: '✓'; color: #fff; font-size: 10px; opacity: 0; transition: opacity 0.2s; }
+  .option-item.selected .option-check::after { opacity: 1; }
+  .option-text { font-size: 13px; color: var(--text-dark); line-height: 1.5; }
+  .scale-row { display: flex; gap: 6px; margin-top: 4px; }
+  .scale-item { flex: 1; text-align: center; padding: 10px 4px 8px; background: #fff; border: 1px solid var(--border); border-radius: 4px; cursor: pointer; transition: all 0.2s; }
+  .scale-item:hover { border-color: var(--green-muted); background: var(--cream-warm); }
+  .scale-item.selected { border-color: var(--green-soft); background: var(--green-deep); }
+  .scale-label { font-size: 11px; line-height: 1.4; font-weight: 300; color: var(--text-dark); }
+  .scale-item.selected .scale-label { color: var(--cream); }
+  .q-divider { border: none; border-top: 1px solid var(--border); margin: 28px 0; }
+  .subsection { font-family: 'Noto Serif KR', serif; font-size: 13px; color: var(--green-soft); margin-bottom: 16px; padding-left: 8px; border-left: 2px solid var(--green-muted); }
+  .btn-row { display: flex; gap: 12px; margin-top: 40px; }
+  .btn-prev { padding: 14px 28px; background: transparent; border: 1px solid var(--border); border-radius: 4px; font-family: 'Noto Sans KR', sans-serif; font-size: 13px; color: var(--text-light); cursor: pointer; transition: all 0.2s; }
+  .btn-prev:hover { border-color: var(--green-muted); color: var(--text-dark); }
+  .btn-next { flex: 1; padding: 14px 28px; background: var(--green-deep); border: none; border-radius: 4px; font-family: 'Noto Sans KR', sans-serif; font-size: 14px; font-weight: 500; color: var(--cream); cursor: pointer; letter-spacing: 0.5px; transition: all 0.2s; }
+  .btn-next:hover { background: var(--green-mid); }
+  .btn-submit { flex: 1; padding: 14px 28px; background: var(--gold); border: none; border-radius: 4px; font-family: 'Noto Sans KR', sans-serif; font-size: 14px; font-weight: 500; color: #fff; cursor: pointer; letter-spacing: 0.5px; transition: all 0.2s; }
+  .btn-submit:hover { background: #a07838; }
+  .complete-screen { display: none; text-align: center; padding: 80px 20px; animation: fadeUp 0.5s ease; }
+  .complete-screen.active { display: block; }
+  .complete-icon { width: 64px; height: 64px; background: var(--green-deep); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 24px; font-size: 26px; }
+  .complete-title { font-family: 'Noto Serif KR', serif; font-size: 22px; font-weight: 400; color: var(--green-deep); margin-bottom: 12px; }
+  .complete-sub { font-size: 14px; color: var(--text-mid); line-height: 1.8; font-weight: 300; }
+  .complete-deco { width: 40px; height: 1px; background: var(--border); margin: 20px auto; }
+  @media (max-width: 480px) { .options-grid.cols2 { grid-template-columns: 1fr; } .options-grid.cols3 { grid-template-columns: 1fr 1fr; } .scale-row { flex-wrap: wrap; } .scale-item { flex: 0 0 calc(50% - 3px); } }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-label">Pre-Class Survey</div>
+  <div class="header-title">라라 영양학 클래스<br><span>기초반 사전 설문</span></div>
+  <div class="header-deco"></div>
+  <div class="header-sub">응답 내용을 바탕으로 4주 커리큘럼을 설계합니다</div>
+</div>
+
+<div class="progress-wrap">
+  <span class="progress-text" id="stepLabel">STEP 1 / 9</span>
+  <div class="progress-bar-bg"><div class="progress-bar-fill" id="progressBar" style="width:11%"></div></div>
+  <span class="progress-pct" id="progressPct">11%</span>
+</div>
+
+<div class="container">
+
+  <!-- STEP 1 -->
+  <div class="step active" id="step-1">
+    <div class="step-header">
+      <div class="step-num">Section 01 · Basic Info</div>
+      <div class="step-title">기본 정보</div>
+      <div class="step-desc">강의 구성에 참고됩니다.</div>
+    </div>
+    <div class="question">
+      <div class="question-label">이름 (닉네임도 괜찮아요)<span class="required">*</span></div>
+      <input type="text" id="q_name" placeholder="예) 김지현 / 지현쌤">
+    </div>
+    <div class="question">
+      <div class="question-label">나이대<span class="required">*</span></div>
+      <div class="options-grid cols3">
+        <label class="option-item" onclick="selectRadio(this,'q_age')"><input type="radio" name="q_age" value="20대"><div class="option-dot"></div><span class="option-text">20대</span></label>
+        <label class="option-item" onclick="selectRadio(this,'q_age')"><input type="radio" name="q_age" value="30대"><div class="option-dot"></div><span class="option-text">30대</span></label>
+        <label class="option-item" onclick="selectRadio(this,'q_age')"><input type="radio" name="q_age" value="40대+"><div class="option-dot"></div><span class="option-text">40대+</span></label>
+      </div>
+    </div>
+    <div class="question">
+      <div class="question-label">직업 / 직종<span class="required">*</span></div>
+      <input type="text" id="q_job" placeholder="예) PT 트레이너 / 필라테스 강사 / 헬스 유튜버 등">
+    </div>
+    <div class="question">
+      <div class="question-label">관련 경력</div>
+      <input type="text" id="q_career" placeholder="예) 트레이너 3년 / 필라테스 2년 / 경력 없음">
+    </div>
+    <div class="btn-row"><button class="btn-next" onclick="nextStep()">다음 →</button></div>
+  </div>
+
+  <!-- STEP 2 -->
+  <div class="step" id="step-2">
+    <div class="step-header">
+      <div class="step-num">Section 02 · Activity & Goal</div>
+      <div class="step-title">현재 활동 & 수강 목표</div>
+    </div>
+    <div class="question">
+      <div class="question-label">현재 활동 형태<span class="required">*</span></div>
+      <div class="question-sub">복수 선택 가능</div>
+      <div class="options-grid cols2">
+        <label class="option-item" onclick="toggleCheck(this)"><input type="checkbox" name="q_activity" value="PT 트레이너"><div class="option-check"></div><span class="option-text">PT 트레이너</span></label>
+        <label class="option-item" onclick="toggleCheck(this)"><input type="checkbox" name="q_activity" value="필라테스 강사"><div class="option-check"></div><span class="option-text">필라테스 강사</span></label>
+        <label class="option-item" onclick="toggleCheck(this)"><input type="checkbox" name="q_activity" value="온라인 코칭"><div class="option-check"></div><span class="option-text">온라인 코칭</span></label>
+        <label class="option-item" onclick="toggleCheck(this)"><input type="checkbox" name="q_activity" value="그룹수업"><div class="option-check"></div><span class="option-text">그룹수업</span></label>
+        <label class="option-item" onclick="toggleCheck(this)"><input type="checkbox" name="q_activity" value="기타"><div class="option-check"></div><span class="option-text">기타</span></label>
+      </div>
+    </div>
+    <div class="question">
+      <div class="question-label">회원 식단 관리 경험<span class="required">*</span></div>
+      <div class="options-grid">
+        <label class="option-item" onclick="selectRadio(this,'q_exp')"><input type="radio" name="q_exp" value="없음"><div class="option-dot"></div><span class="option-text">없음</span></label>
+        <label class="option-item" onclick="selectRadio(this,'q_exp')"><input type="radio" name="q_exp" value="가끔"><div class="option-dot"></div><span class="option-text">가끔 해봤음</span></label>
+        <label class="option-item" onclick="selectRadio(this,'q_exp')"><input type="radio" name="q_exp" value="자주"><div class="option-dot"></div><span class="option-text">자주 함</span></label>
+        <label class="option-item" onclick="selectRadio(this,'q_exp')"><input type="radio" name="q_exp" value="전문적으로"><div class="option-dot"></div><span class="option-text">전문적으로 하고 있음</span></label>
+      </div>
+    </div>
+    <div class="question">
+      <div class="question-label">이번 강의에서 얻고 싶은 것</div>
+      <textarea id="q_goal" placeholder="자유롭게 적어주세요"></textarea>
+    </div>
+    <div class="btn-row"><button class="btn-prev" onclick="prevStep()">← 이전</button><button class="btn-next" onclick="nextStep()">다음 →</button></div>
+  </div>
+
+  <!-- STEP 3 -->
+  <div class="step" id="step-3">
+    <div class="step-header">
+      <div class="step-num">Section 03 · Self Diet</div>
+      <div class="step-title">본인 식단 이해도</div>
+      <div class="step-desc">본인도 모르면 회원한테 못 가르쳐요. 솔직하게 선택해 주세요 😊</div>
+    </div>
+    <div class="question">
+      <div class="question-label">평소 본인 식단을 어떻게 관리하나요?<span class="required">*</span></div>
+      <div class="options-grid">
+        <label class="option-item" onclick="selectRadio(this,'q_selfmgmt')"><input type="radio" name="q_selfmgmt" value="그냥 먹음"><div class="option-dot"></div><span class="option-text">그냥 먹는다 (의식 없음)</span></label>
+        <label class="option-item" onclick="selectRadio(this,'q_selfmgmt')"><input type="radio" name="q_selfmgmt" value="건강식 위주"><div class="option-dot"></div><span class="option-text">건강식 위주로 대충 조절</span></label>
+        <label class="option-item" onclick="selectRadio(this,'q_selfmgmt')"><input type="radio" name="q_selfmgmt" value="칼로리 기준"><div class="option-dot"></div><span class="option-text">칼로리 기준으로 조절</span></label>
+        <label class="option-item" onclick="selectRadio(this,'q_selfmgmt')"><input type="radio" name="q_selfmgmt" value="탄단지 비율"><div class="option-dot"></div><span class="option-text">탄단지 비율까지 고려</span></label>
+        <label class="option-item" onclick="selectRadio(this,'q_selfmgmt')"><input type="radio" name="q_selfmgmt" value="상황별 전략적"><div class="option-dot"></div><span class="option-text">상황별로 전략적으로 조절</span></label>
+      </div>
+    </div>
+    <div class="question">
+      <div class="question-label">식단 구성 기준은 무엇인가요?</div>
+      <div class="question-sub">복수 선택 가능</div>
+      <div class="options-grid cols2">
+        <label class="option-item" onclick="toggleCheck(this)"><input type="checkbox" name="q_basis" value="칼로리"><div class="option-check"></div><span class="option-text">칼로리 기준</span></label>
+        <label class="option-item" onclick="toggleCheck(this)"><input type="checkbox" name="q_basis" value="탄단지 비율"><div class="option-check"></div><span class="option-text">탄단지 비율</span></label>
+        <label class="option-item" onclick="toggleCheck(this)"><input type="checkbox" name="q_basis" value="음식 종류"><div class="option-check"></div><span class="option-text">음식 종류 (클린/가공)</span></label>
+        <label class="option-item" onclick="toggleCheck(this)"><input type="checkbox" name="q_basis" value="식사 타이밍"><div class="option-check"></div><span class="option-text">식사 타이밍</span></label>
+        <label class="option-item" onclick="toggleCheck(this)"><input type="checkbox" name="q_basis" value="감으로"><div class="option-check"></div><span class="option-text">감으로</span></label>
+      </div>
+    </div>
+    <div class="question">
+      <div class="question-label">다이어트할 때 식단을 어떻게 바꾸나요?</div>
+      <textarea id="q_dietchange" placeholder="자유롭게 적어주세요"></textarea>
+    </div>
+    <div class="btn-row"><button class="btn-prev" onclick="prevStep()">← 이전</button><button class="btn-next" onclick="nextStep()">다음 →</button></div>
+  </div>
+
+  <!-- STEP 4 -->
+  <div class="step" id="step-4">
+    <div class="step-header">
+      <div class="step-num">Section 04 · Nutrition Level</div>
+      <div class="step-title">영양학 실력 진단</div>
+      <div class="step-desc">커리큘럼 난이도를 결정하는 가장 중요한 파트입니다.</div>
+    </div>
+    <div class="subsection">식단 설계 능력</div>
+    <div class="question">
+      <div class="question-label">회원 식단을 어떻게 구성하나요?<span class="required">*</span></div>
+      <div class="options-grid">
+        <label class="option-item" onclick="selectRadio(this,'q_design')"><input type="radio" name="q_design" value="못함"><div class="option-dot"></div><span class="option-text">못함</span></label>
+        <label class="option-item" onclick="selectRadio(this,'q_design')"><input type="radio" name="q_design" value="감으로"><div class="option-dot"></div><span class="option-text">감으로 구성</span></label>
+        <label class="option-item" onclick="selectRadio(this,'q_design')"><input type="radio" name="q_design" value="칼로리 기준"><div class="option-dot"></div><span class="option-text">칼로리 기준으로만 구성</span></label>
+        <label class="option-item" onclick="selectRadio(this,'q_design')"><input type="radio" name="q_design" value="탄단지 비율"><div class="option-dot"></div><span class="option-text">탄단지 비율까지 고려</span></label>
+        <label class="option-item" onclick="selectRadio(this,'q_design')"><input type="radio" name="q_design" value="개인 맞춤 설계"><div class="option-dot"></div><span class="option-text">개인 맞춤으로 설계 가능</span></label>
+      </div>
+    </div>
+    <div class="question">
+      <div class="question-label">탄단지 비율 설정 능력</div>
+      <div class="scale-row" data-group="q_macro">
+        <div class="scale-item" onclick="selectScale(this)"><div class="scale-label">모름</div></div>
+        <div class="scale-item" onclick="selectScale(this)"><div class="scale-label">느낌만 있음</div></div>
+        <div class="scale-item" onclick="selectScale(this)"><div class="scale-label">기본 설정 가능</div></div>
+        <div class="scale-item" onclick="selectScale(this)"><div class="scale-label">목적별 조절 가능</div></div>
+      </div>
+    </div>
+    <hr class="q-divider">
+    <div class="subsection">개념 이해도</div>
+    <div class="question">
+      <div class="question-label">혈당 / 인슐린</div>
+      <div class="scale-row" data-group="q_insulin">
+        <div class="scale-item" onclick="selectScale(this)"><div class="scale-label">모름</div></div>
+        <div class="scale-item" onclick="selectScale(this)"><div class="scale-label">들어봄</div></div>
+        <div class="scale-item" onclick="selectScale(this)"><div class="scale-label">설명 가능</div></div>
+        <div class="scale-item" onclick="selectScale(this)"><div class="scale-label">적용 가능</div></div>
+      </div>
+    </div>
+    <div class="question">
+      <div class="question-label">칼로리 vs 대사</div>
+      <div class="scale-row" data-group="q_meta">
+        <div class="scale-item" onclick="selectScale(this)"><div class="scale-label">모름</div></div>
+        <div class="scale-item" onclick="selectScale(this)"><div class="scale-label">들어봄</div></div>
+        <div class="scale-item" onclick="selectScale(this)"><div class="scale-label">이해함</div></div>
+        <div class="scale-item" onclick="selectScale(this)"><div class="scale-label">적용 가능</div></div>
+      </div>
+    </div>
+    <div class="question">
+      <div class="question-label">체지방 증가 원리</div>
+      <div class="scale-row" data-group="q_fat">
+        <div class="scale-item" onclick="selectScale(this)"><div class="scale-label">모름</div></div>
+        <div class="scale-item" onclick="selectScale(this)"><div class="scale-label">감만 있음</div></div>
+        <div class="scale-item" onclick="selectScale(this)"><div class="scale-label">이해함</div></div>
+        <div class="scale-item" onclick="selectScale(this)"><div class="scale-label">설명 가능</div></div>
+      </div>
+    </div>
+    <div class="question">
+      <div class="question-label">단백질 필요량</div>
+      <div class="scale-row" data-group="q_protein">
+        <div class="scale-item" onclick="selectScale(this)"><div class="scale-label">모름</div></div>
+        <div class="scale-item" onclick="selectScale(this)"><div class="scale-label">대충 앎</div></div>
+        <div class="scale-item" onclick="selectScale(this)"><div class="scale-label">계산 가능</div></div>
+      </div>
+    </div>
+    <div class="question">
+      <div class="question-label">정체기 원인</div>
+      <div class="scale-row" data-group="q_plateau">
+        <div class="scale-item" onclick="selectScale(this)"><div class="scale-label">모름</div></div>
+        <div class="scale-item" onclick="selectScale(this)"><div class="scale-label">경험 있음</div></div>
+        <div class="scale-item" onclick="selectScale(this)"><div class="scale-label">설명 가능</div></div>
+      </div>
+    </div>
+    <div class="btn-row"><button class="btn-prev" onclick="prevStep()">← 이전</button><button class="btn-next" onclick="nextStep()">다음 →</button></div>
+  </div>
+
+  <!-- STEP 5 -->
+  <div class="step" id="step-5">
+    <div class="step-header">
+      <div class="step-num">Section 05 · Diet Detail</div>
+      <div class="step-title">식단 디테일 이해도</div>
+      <div class="step-desc">고급 레벨 판별 파트입니다.</div>
+    </div>
+    <div class="subsection">식품군 이해</div>
+    <div class="question">
+      <div class="question-label">탄수화물 종류에 따른 차이</div>
+      <div class="question-sub">단순당 vs 복합탄수 / GI / 흡수속도</div>
+      <div class="scale-row" data-group="q_carb">
+        <div class="scale-item" onclick="selectScale(this)"><div class="scale-label">모름</div></div>
+        <div class="scale-item" onclick="selectScale(this)"><div class="scale-label">조금 앎</div></div>
+        <div class="scale-item" onclick="selectScale(this)"><div class="scale-label">설명 가능</div></div>
+        <div class="scale-item" onclick="selectScale(this)"><div class="scale-label">적용 가능</div></div>
+      </div>
+    </div>
+    <div class="question">
+      <div class="question-label">단백질 식품군 차이 이해</div>
+      <div class="question-sub">흡수속도 / 동물성 vs 식물성 / 질</div>
+      <div class="scale-row" data-group="q_proteintype">
+        <div class="scale-item" onclick="selectScale(this)"><div class="scale-label">모름</div></div>
+        <div class="scale-item" onclick="selectScale(this)"><div class="scale-label">조금 앎</div></div>
+        <div class="scale-item" onclick="selectScale(this)"><div class="scale-label">설명 가능</div></div>
+        <div class="scale-item" onclick="selectScale(this)"><div class="scale-label">적용 가능</div></div>
+      </div>
+    </div>
+    <div class="question">
+      <div class="question-label">지방 섭취에 대한 이해</div>
+      <div class="scale-row" data-group="q_lipid">
+        <div class="scale-item" onclick="selectScale(this)"><div class="scale-label">거의 모름</div></div>
+        <div class="scale-item" onclick="selectScale(this)"><div class="scale-label">막연히 앎</div></div>
+        <div class="scale-item" onclick="selectScale(this)"><div class="scale-label">종류 구분 가능</div></div>
+        <div class="scale-item" onclick="selectScale(this)"><div class="scale-label">식단 적용 가능</div></div>
+      </div>
+    </div>
+    <hr class="q-divider">
+    <div class="subsection">식사 전략</div>
+    <div class="question">
+      <div class="question-label">식사 간격 / 타이밍에 대한 이해</div>
+      <div class="scale-row" data-group="q_timing">
+        <div class="scale-item" onclick="selectScale(this)"><div class="scale-label">신경 안 씀</div></div>
+        <div class="scale-item" onclick="selectScale(this)"><div class="scale-label">어느 정도 고려</div></div>
+        <div class="scale-item" onclick="selectScale(this)"><div class="scale-label">상황별 조절 가능</div></div>
+      </div>
+    </div>
+    <div class="question">
+      <div class="question-label">운동 전/후 식단 구성</div>
+      <div class="scale-row" data-group="q_periworkout">
+        <div class="scale-item" onclick="selectScale(this)"><div class="scale-label">모름</div></div>
+        <div class="scale-item" onclick="selectScale(this)"><div class="scale-label">대충 앎</div></div>
+        <div class="scale-item" onclick="selectScale(this)"><div class="scale-label">구조 이해</div></div>
+        <div class="scale-item" onclick="selectScale(this)"><div class="scale-label">실제 적용 가능</div></div>
+      </div>
+    </div>
+    <div class="btn-row"><button class="btn-prev" onclick="prevStep()">← 이전</button><button class="btn-next" onclick="nextStep()">다음 →</button></div>
+  </div>
+
+  <!-- STEP 6 -->
+  <div class="step" id="step-6">
+    <div class="step-header">
+      <div class="step-num">Section 06 · Hormones</div>
+      <div class="step-title">호르몬 이해도</div>
+      <div class="step-desc">차별화 포인트 파트입니다.</div>
+    </div>
+    <div class="subsection">일반 호르몬</div>
+    <div class="question">
+      <div class="question-label">인슐린 / 코르티솔 / 렙틴 / 그렐린</div>
+      <div class="scale-row" data-group="q_hormone">
+        <div class="scale-item" onclick="selectScale(this)"><div class="scale-label">모름</div></div>
+        <div class="scale-item" onclick="selectScale(this)"><div class="scale-label">들어봄</div></div>
+        <div class="scale-item" onclick="selectScale(this)"><div class="scale-label">개념 이해</div></div>
+        <div class="scale-item" onclick="selectScale(this)"><div class="scale-label">식단 적용 가능</div></div>
+      </div>
+    </div>
+    <hr class="q-divider">
+    <div class="subsection">여성 호르몬</div>
+    <div class="question">
+      <div class="question-label">생리주기와 식욕/체중 변화 관계</div>
+      <div class="scale-row" data-group="q_cycle">
+        <div class="scale-item" onclick="selectScale(this)"><div class="scale-label">모름</div></div>
+        <div class="scale-item" onclick="selectScale(this)"><div class="scale-label">체감만 있음</div></div>
+        <div class="scale-item" onclick="selectScale(this)"><div class="scale-label">설명 가능</div></div>
+        <div class="scale-item" onclick="selectScale(this)"><div class="scale-label">식단/운동 적용</div></div>
+      </div>
+    </div>
+    <div class="question">
+      <div class="question-label">여성 회원 식단 설계 시 생리주기 고려 여부</div>
+      <div class="options-grid">
+        <label class="option-item" onclick="selectRadio(this,'q_femalecons')"><input type="radio" name="q_femalecons" value="전혀 안 함"><div class="option-dot"></div><span class="option-text">전혀 안 함</span></label>
+        <label class="option-item" onclick="selectRadio(this,'q_femalecons')"><input type="radio" name="q_femalecons" value="가끔"><div class="option-dot"></div><span class="option-text">가끔 고려함</span></label>
+        <label class="option-item" onclick="selectRadio(this,'q_femalecons')"><input type="radio" name="q_femalecons" value="항상"><div class="option-dot"></div><span class="option-text">항상 고려함</span></label>
+      </div>
+    </div>
+    <div class="btn-row"><button class="btn-prev" onclick="prevStep()">← 이전</button><button class="btn-next" onclick="nextStep()">다음 →</button></div>
+  </div>
+
+  <!-- STEP 7 -->
+  <div class="step" id="step-7">
+    <div class="step-header">
+      <div class="step-num">Section 07 · Real Problems</div>
+      <div class="step-title">실제 문제 상황</div>
+      <div class="step-desc">현장에서 마주하는 어려움을 알려주세요.</div>
+    </div>
+    <div class="question">
+      <div class="question-label">회원 식단 지도하면서 가장 어려운 점</div>
+      <textarea id="q_hard" placeholder="자유롭게 적어주세요"></textarea>
+    </div>
+    <div class="question">
+      <div class="question-label">회원들이 가장 많이 하는 질문</div>
+      <textarea id="q_faq" placeholder="자유롭게 적어주세요"></textarea>
+    </div>
+    <div class="question">
+      <div class="question-label">자주 겪는 어려운 상황<span class="required">*</span></div>
+      <div class="question-sub">복수 선택 가능</div>
+      <div class="options-grid cols2">
+        <label class="option-item" onclick="toggleCheck(this)"><input type="checkbox" name="q_situation" value="폭식/야식"><div class="option-check"></div><span class="option-text">폭식 / 야식</span></label>
+        <label class="option-item" onclick="toggleCheck(this)"><input type="checkbox" name="q_situation" value="정체기"><div class="option-check"></div><span class="option-text">정체기</span></label>
+        <label class="option-item" onclick="toggleCheck(this)"><input type="checkbox" name="q_situation" value="외식"><div class="option-check"></div><span class="option-text">외식</span></label>
+        <label class="option-item" onclick="toggleCheck(this)"><input type="checkbox" name="q_situation" value="탄수화물 조절"><div class="option-check"></div><span class="option-text">탄수화물 조절</span></label>
+        <label class="option-item" onclick="toggleCheck(this)"><input type="checkbox" name="q_situation" value="식단 유지 실패"><div class="option-check"></div><span class="option-text">식단 유지 실패</span></label>
+        <label class="option-item" onclick="toggleCheck(this)"><input type="checkbox" name="q_situation" value="여성 컨디션 변화"><div class="option-check"></div><span class="option-text">여성 회원 컨디션 변화</span></label>
+      </div>
+    </div>
+    <div class="btn-row"><button class="btn-prev" onclick="prevStep()">← 이전</button><button class="btn-next" onclick="nextStep()">다음 →</button></div>
+  </div>
+
+  <!-- STEP 8 -->
+  <div class="step" id="step-8">
+    <div class="step-header">
+      <div class="step-num">Section 08 · Wishlist</div>
+      <div class="step-title">배우고 싶은 것</div>
+    </div>
+    <div class="question">
+      <div class="question-label">이번 강의에서 가장 배우고 싶은 3가지</div>
+      <textarea id="q_wish" placeholder="예) 탄단지 계산법, 여성 호르몬 이해, 정체기 대처법"></textarea>
+    </div>
+    <div class="question">
+      <div class="question-label">관심 주제<span class="required">*</span></div>
+      <div class="question-sub">복수 선택 가능</div>
+      <div class="options-grid cols2">
+        <label class="option-item" onclick="toggleCheck(this)"><input type="checkbox" name="q_topics" value="탄단지 구성법"><div class="option-check"></div><span class="option-text">탄단지 구성법</span></label>
+        <label class="option-item" onclick="toggleCheck(this)"><input type="checkbox" name="q_topics" value="회원 식단 설계"><div class="option-check"></div><span class="option-text">회원 식단 설계</span></label>
+        <label class="option-item" onclick="toggleCheck(this)"><input type="checkbox" name="q_topics" value="혈당/인슐린"><div class="option-check"></div><span class="option-text">혈당 / 인슐린</span></label>
+        <label class="option-item" onclick="toggleCheck(this)"><input type="checkbox" name="q_topics" value="여성 호르몬"><div class="option-check"></div><span class="option-text">여성 호르몬</span></label>
+        <label class="option-item" onclick="toggleCheck(this)"><input type="checkbox" name="q_topics" value="정체기 해결"><div class="option-check"></div><span class="option-text">정체기 해결</span></label>
+        <label class="option-item" onclick="toggleCheck(this)"><input type="checkbox" name="q_topics" value="식욕 조절"><div class="option-check"></div><span class="option-text">식욕 조절</span></label>
+        <label class="option-item" onclick="toggleCheck(this)"><input type="checkbox" name="q_topics" value="상담 스킬"><div class="option-check"></div><span class="option-text">상담 스킬</span></label>
+      </div>
+    </div>
+    <div class="btn-row"><button class="btn-prev" onclick="prevStep()">← 이전</button><button class="btn-next" onclick="nextStep()">다음 →</button></div>
+  </div>
+
+  <!-- STEP 9 -->
+  <div class="step" id="step-9">
+    <div class="step-header">
+      <div class="step-num">Section 09 · Learning Style</div>
+      <div class="step-title">학습 스타일</div>
+      <div class="step-desc">마지막 파트입니다 🌿</div>
+    </div>
+    <div class="question">
+      <div class="question-label">원하는 강의 방식<span class="required">*</span></div>
+      <div class="question-sub">복수 선택 가능</div>
+      <div class="options-grid cols2">
+        <label class="option-item" onclick="toggleCheck(this)"><input type="checkbox" name="q_style" value="이론 중심"><div class="option-check"></div><span class="option-text">이론 중심</span></label>
+        <label class="option-item" onclick="toggleCheck(this)"><input type="checkbox" name="q_style" value="사례 중심"><div class="option-check"></div><span class="option-text">사례 중심</span></label>
+        <label class="option-item" onclick="toggleCheck(this)"><input type="checkbox" name="q_style" value="실습 중심"><div class="option-check"></div><span class="option-text">실습 중심</span></label>
+        <label class="option-item" onclick="toggleCheck(this)"><input type="checkbox" name="q_style" value="피드백 중심"><div class="option-check"></div><span class="option-text">피드백 중심</span></label>
+      </div>
+    </div>
+    <div class="question">
+      <div class="question-label">과제 가능 여부<span class="required">*</span></div>
+      <div class="options-grid">
+        <label class="option-item" onclick="selectRadio(this,'q_homework')"><input type="radio" name="q_homework" value="적극 가능"><div class="option-dot"></div><span class="option-text">적극적으로 가능해요</span></label>
+        <label class="option-item" onclick="selectRadio(this,'q_homework')"><input type="radio" name="q_homework" value="간단한 것만"><div class="option-dot"></div><span class="option-text">간단한 것만 가능해요</span></label>
+        <label class="option-item" onclick="selectRadio(this,'q_homework')"><input type="radio" name="q_homework" value="부담됨"><div class="option-dot"></div><span class="option-text">솔직히 좀 부담돼요</span></label>
+      </div>
+    </div>
+    <div class="question">
+      <div class="question-label">기타 하고 싶은 말 또는 요청사항</div>
+      <textarea id="q_etc" placeholder="자유롭게 남겨주세요"></textarea>
+    </div>
+    <div class="btn-row"><button class="btn-prev" onclick="prevStep()">← 이전</button><button class="btn-submit" onclick="submitForm()">제출하기 ✓</button></div>
+  </div>
+
+  <!-- Complete -->
+  <div class="complete-screen" id="completeScreen">
+    <div class="complete-icon">🌿</div>
+    <div class="complete-title">설문 완료</div>
+    <div class="complete-deco"></div>
+    <div class="complete-sub">소중한 응답 감사합니다.<br>응답 내용을 바탕으로<br>4주 커리큘럼을 설계하겠습니다.<br><br>📩 단톡방으로 수업 안내 드릴게요!</div>
+  </div>
+
+</div>
+
+<script>
+  const TOTAL = 9;
+  let current = 1;
+
+  function updateProgress() {
+    const pct = Math.round((current / TOTAL) * 100);
+    document.getElementById('progressBar').style.width = pct + '%';
+    document.getElementById('progressPct').textContent = pct + '%';
+    document.getElementById('stepLabel').textContent = 'STEP ' + current + ' / ' + TOTAL;
+  }
+
+  function showStep(n) {
+    document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+    const el = document.getElementById('step-' + n);
+    if (el) { el.classList.add('active'); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+  }
+
+  function nextStep() { if (current < TOTAL) { current++; showStep(current); updateProgress(); } }
+  function prevStep() { if (current > 1) { current--; showStep(current); updateProgress(); } }
+
+  function selectRadio(el, name) {
+    document.querySelectorAll('[name="' + name + '"]').forEach(inp => inp.closest('.option-item').classList.remove('selected'));
+    el.classList.add('selected');
+    el.querySelector('input').checked = true;
+  }
+
+  function toggleCheck(el) {
+    el.classList.toggle('selected');
+    el.querySelector('input').checked = el.classList.contains('selected');
+  }
+
+  function selectScale(el) {
+    const row = el.closest('.scale-row');
+    row.querySelectorAll('.scale-item').forEach(item => item.classList.remove('selected'));
+    el.classList.add('selected');
+  }
+
+  function collectData() {
+    const data = { timestamp: new Date().toISOString() };
+    ['q_name','q_job','q_career','q_goal','q_dietchange','q_hard','q_faq','q_wish','q_etc'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) data[id] = el.value;
+    });
+    ['q_age','q_exp','q_selfmgmt','q_design','q_femalecons','q_homework'].forEach(name => {
+      const checked = document.querySelector('[name="' + name + '"]:checked');
+      data[name] = checked ? checked.value : '';
+    });
+    ['q_activity','q_basis','q_situation','q_topics','q_style'].forEach(name => {
+      data[name] = [...document.querySelectorAll('[name="' + name + '"]:checked')].map(i => i.value);
+    });
+    document.querySelectorAll('.scale-row').forEach(row => {
+      const group = row.dataset.group;
+      const selected = row.querySelector('.scale-item.selected');
+      if (group) data[group] = selected ? selected.querySelector('.scale-label').textContent : '';
+    });
+    return data;
+  }
+
+  // ✅ 여기에 배포된 GAS URL 입력
+  const API_URL = '/api/survey'; // Vercel 배포 후 자동 연결
+
+  async function submitForm() {
+    const data = collectData();
+    const btn = document.querySelector('.btn-submit');
+    btn.textContent = '저장 중...';
+    btn.disabled = true;
+
+    try {
+      const res = await fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      if (!res.ok) throw new Error('서버 오류');
+      // no-cors 모드라 응답 확인 불가 → 성공으로 처리
+      showComplete();
+    } catch (err) {
+      console.error('저장 실패:', err);
+      // 실패해도 완료 화면은 보여줌 (데이터는 console에 남음)
+      console.log('응답 데이터 백업:', JSON.stringify(data, null, 2));
+      showComplete();
+    }
+  }
+
+  function showComplete() {
+    document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+    document.querySelector('.progress-wrap').style.display = 'none';
+    document.getElementById('completeScreen').classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+</script>
+</body>
+</html>
